@@ -181,8 +181,8 @@ header {
   position: fixed;
   top: 0;
   width: 100%;
-  z-index: 100;
-  padding: 28px 70px;
+  z-index: 1000;
+  padding: 22px 70px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -191,7 +191,7 @@ header {
 header.scrolled {
   background: var(--nav-scrolled);
   backdrop-filter: blur(16px);
-  padding: 16px 70px;
+  padding: 14px 70px;
   box-shadow: 0 1px 0 var(--border);
 }
 .logo {
@@ -271,24 +271,31 @@ header.scrolled {
   transform: rotate(20deg);
 }
 
-/* Hamburger (mobile) */
+/* =====================
+   HAMBURGER BUTTON
+   ===================== */
 .hamburger {
   display: none;
-  width: 42px;
-  height: 36px;
+  width: 44px;
+  height: 44px;
   background: transparent;
   border: none;
   cursor: pointer;
-  padding: 6px;
   align-items: center;
   justify-content: center;
+  padding: 0;
+  flex-shrink: 0;
+  z-index: 1200;
+  position: relative;
 }
 .hamb-box {
   display: inline-block;
   position: relative;
-  width: 26px;
+  width: 28px;
   height: 2px;
-  background: var(--text-muted);
+  background: var(--text);
+  border-radius: 2px;
+  transition: background 0.25s ease;
 }
 .hamb-inner,
 .hamb-box::before,
@@ -299,58 +306,99 @@ header.scrolled {
   left: 0;
   width: 100%;
   height: 2px;
-  background: var(--text-muted);
+  border-radius: 2px;
+  background: var(--text);
   transition:
-    transform 0.25s ease,
-    top 0.25s ease,
-    opacity 0.25s ease;
+    transform 0.3s ease,
+    top 0.3s ease,
+    opacity 0.25s ease,
+    background 0.3s ease;
 }
 .hamb-box::before {
-  top: -8px;
+  top: -9px;
 }
 .hamb-box::after {
-  top: 8px;
+  top: 9px;
 }
+/* Animated X when open */
 .menu-open .hamb-box {
   background: transparent;
 }
 .menu-open .hamb-box::before {
-  transform: translateY(8px) rotate(45deg);
+  top: 0;
+  transform: rotate(45deg);
 }
 .menu-open .hamb-box::after {
-  transform: translateY(-8px) rotate(-45deg);
+  top: 0;
+  transform: rotate(-45deg);
 }
 
-/* Mobile nav overlay */
+/* =====================
+   MOBILE NAV OVERLAY
+   ===================== */
 .mobile-nav {
   position: fixed;
-  inset: 0 0 0 100%;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
   background: var(--bg);
-  z-index: 120;
-  transition: transform 0.32s ease;
-  transform: translateX(0);
+  z-index: 1100;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 8px;
+  /* Hidden by default: slide to the right */
+  transform: translateX(100%);
+  transition: transform 0.35s cubic-bezier(0.77, 0, 0.175, 1);
+  pointer-events: none;
+}
+.menu-open .mobile-nav {
+  transform: translateX(0);
+  pointer-events: auto;
 }
 .mobile-nav ul {
   list-style: none;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 .mobile-nav a {
   display: block;
-  padding: 14px 20px;
+  padding: 16px 40px;
   font-family: "Syne", sans-serif;
-  font-size: 20px;
+  font-size: clamp(22px, 5vw, 32px);
+  font-weight: 700;
   color: var(--text);
   text-decoration: none;
+  letter-spacing: -0.02em;
+  transition: color 0.2s;
 }
-.menu-open .mobile-nav {
-  left: 0;
-  transform: translateX(-100%);
+.mobile-nav a:hover {
+  color: var(--pink);
+}
+.mobile-close {
+  position: absolute;
+  top: 20px;
+  right: 22px;
+  background: transparent;
+  border: none;
+  font-size: 26px;
+  color: var(--text);
+  cursor: pointer;
+  line-height: 1;
+  z-index: 1;
+  transition: color 0.2s;
+}
+.mobile-close:hover {
+  color: var(--pink);
 }
 
-/* Hide default cursor on touch devices by using script to add class; allow pointer on interactive elements */
+/* =====================
+   CURSOR / TOUCH
+   ===================== */
 .no-cursor .cursor {
   display: none !important;
 }
@@ -360,27 +408,17 @@ header.scrolled {
 }
 
 /* Focus styles for accessibility */
-.hamburger:focus,
-.hamburger:active,
-.mobile-close:focus {
-  outline: 3px solid rgba(255, 107, 157, 0.15);
+.hamburger:focus-visible,
+.mobile-close:focus-visible {
+  outline: 3px solid rgba(255, 107, 157, 0.4);
   outline-offset: 3px;
   border-radius: 6px;
 }
-.mobile-nav a:focus {
-  background: rgba(255, 107, 157, 0.06);
+.mobile-nav a:focus-visible {
+  background: rgba(255, 107, 157, 0.08);
   color: var(--pink);
   outline: none;
-}
-.mobile-close {
-  position: absolute;
-  top: 18px;
-  right: 20px;
-  background: transparent;
-  border: none;
-  font-size: 22px;
-  color: var(--text);
-  cursor: pointer;
+  border-radius: 8px;
 }
 
 .hero {
@@ -1041,128 +1079,150 @@ header.scrolled {
   display: block;
 }
 
-/* Responsive rules */
-@media (max-width: 1024px) {
-  header {
-    padding: 16px 30px;
-  }
-  .hero {
-    padding: 120px 30px 80px;
-  }
-  .hero-layout {
-    gap: 36px;
-    max-width: 1000px;
-  }
-  .photo-container {
-    width: 320px;
-  }
-  .about-bento {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  .skills-layout {
-    grid-template-columns: 1fr 1fr;
-  }
-  .proj-row {
-    grid-template-columns: 50px 100px 1fr auto;
-  }
-}
+/* ==============================================
+   RESPONSIVE — MEDIA QUERIES (UNIQUE ET PROPRE)
+   ============================================== */
 
-@media (max-width: 768px) {
-  .nav-links {
-    gap: 18px;
-    font-size: 12px;
-    display: none;
-  }
-  .hamburger {
-    display: flex;
-  }
-  .hero {
-    padding: 100px 20px 60px;
-  }
-  .hero-layout {
-    grid-template-columns: 1fr;
-  }
-  .hero-right {
-    order: 2;
-    margin-top: 30px;
-  }
-  .hero-left {
-    order: 1;
-  }
-  .photo-container {
-    width: 260px;
-  }
-  .about-bento {
-    grid-template-columns: 1fr;
-  }
-  .bento-card.wide {
-    grid-column: span 1;
-  }
-  .skills-layout {
-    grid-template-columns: 1fr;
-    gap: 30px;
-  }
-  .contact-layout {
-    grid-template-columns: 1fr;
-    gap: 30px;
-  }
-  .proj-row {
-    grid-template-columns: 40px 80px 1fr;
-    gap: 16px;
-  }
-  .proj-thumb {
-    width: 80px;
-    height: 56px;
-  }
+/* — TABLET LARGE (≤ 1200px) — */
+@media (max-width: 1200px) {
+  header,
   header.scrolled {
-    padding: 12px 20px;
+    padding: 18px 40px;
   }
+  .hero { padding: 130px 40px 90px; }
+  .sec  { padding: 90px 40px; }
+  footer { padding: 40px 40px; }
+  .section-divider { padding: 0 40px; }
+  .proj-row::before { left: -40px; right: -40px; }
 }
 
-@media (max-width: 480px) {
-  header {
-    padding: 12px 16px;
+/* — TABLET (≤ 1024px) — */
+@media (max-width: 1024px) {
+  header,
+  header.scrolled {
+    padding: 16px 28px;
   }
-  .logo {
-    font-size: 16px;
-  }
-  .nav-right {
-    gap: 12px;
-  }
-  .nav-links {
-    display: none;
-  }
-  .theme-btn {
-    padding: 6px 10px;
-  }
-  .hero {
-    padding: 80px 16px 40px;
-  }
-  .hero-name {
-    font-size: clamp(28px, 8vw, 48px);
-  }
-  .hero-role {
-    font-size: 16px;
-  }
-  .photo-container {
-    width: 220px;
-  }
-  .proj-row {
+  .hero         { padding: 120px 28px 80px; }
+  .sec          { padding: 80px 28px; }
+  footer        { padding: 36px 28px; }
+  .section-divider { padding: 0 28px; }
+
+  /* Hero : photo en haut */
+  .hero-layout {
     grid-template-columns: 1fr;
-    grid-template-rows: auto auto;
-    gap: 10px;
+    gap: 40px;
   }
-  .proj-num {
-    grid-row: 1 / 2;
+  .hero-right { order: -1; }
+  .hero-left  { order: 1; }
+  .photo-container  { width: 280px; }
+  .photo-box        { height: 320px; }
+
+  /* About */
+  .about-bento { grid-template-columns: 1fr 1fr; }
+  .bento-card.wide { grid-column: span 2; }
+
+  /* Skills */
+  .skills-layout { grid-template-columns: 1fr; gap: 40px; }
+
+  /* Projets */
+  .proj-row {
+    grid-template-columns: 48px 110px 1fr;
+    gap: 20px;
+  }
+  .proj-row::before { left: -28px; right: -28px; }
+  .proj-tags  { display: none; }
+  .proj-arrow { display: none; }
+
+  /* Contact */
+  .contact-layout { grid-template-columns: 1fr; gap: 40px; }
+
+  /* Footer */
+  footer { flex-direction: column; text-align: center; }
+  .foot-links { justify-content: center; }
+}
+
+/* — MOBILE LARGE (≤ 768px) — */
+@media (max-width: 768px) {
+  /* Nav */
+  .nav-links  { display: none; }
+  .hamburger  { display: flex; }
+  .theme-btn span:last-child { display: none; } /* cacher le label texte */
+
+  header,
+  header.scrolled { padding: 14px 20px; }
+
+  /* Hero */
+  .hero   { padding: 100px 20px 60px; }
+  .sec    { padding: 70px 20px; }
+  footer  { padding: 30px 20px; }
+  .section-divider { padding: 0 20px; }
+
+  .photo-container { width: 240px; }
+  .photo-box       { height: 280px; }
+
+  /* Projets */
+  .proj-row {
+    grid-template-columns: 44px 90px 1fr;
+    gap: 14px;
+    padding: 20px 0;
+  }
+  .proj-thumb { width: 90px; height: 60px; }
+  .proj-row::before { left: -20px; right: -20px; }
+
+  /* Formulaire contact */
+  .f-row { grid-template-columns: 1fr; gap: 12px; }
+}
+
+/* — MOBILE (≤ 540px) — */
+@media (max-width: 540px) {
+  header,
+  header.scrolled { padding: 12px 16px; }
+  .nav-right { gap: 10px; }
+  .logo { font-size: 16px; }
+  .theme-btn { padding: 6px 10px; font-size: 11px; }
+
+  .hero   { padding: 88px 16px 50px; }
+  .sec    { padding: 60px 16px; }
+  footer  { padding: 28px 16px; }
+  .section-divider { padding: 0 16px; }
+
+  .hero-eyebrow { margin-bottom: 18px; }
+  .hero-name  { font-size: clamp(34px, 9vw, 52px); }
+  .hero-role  { font-size: 15px; }
+
+  .photo-container { width: 200px; }
+  .photo-box       { height: 240px; }
+
+  /* About — 1 colonne */
+  .about-bento      { grid-template-columns: 1fr; }
+  .bento-card.wide  { grid-column: span 1; }
+  .bento-card       { padding: 24px; }
+
+  /* Section heads */
+  .sec-head { margin-bottom: 40px; }
+
+  /* Projets — layout simplifié */
+  .proj-row {
+    grid-template-columns: 40px 1fr;
+    grid-template-rows: auto auto;
+    gap: 10px 12px;
+    padding: 18px 0;
   }
   .proj-thumb {
+    grid-column: 1 / 3;
     width: 100%;
     height: 160px;
     border-radius: 12px;
   }
-  .proj-tags {
-    justify-content: flex-start;
-  }
+  .proj-num  { grid-column: 1 / 2; }
+  .proj-info { grid-column: 2 / 3; }
+
+  /* Contact form */
+  .btn-send { width: 100%; justify-content: center; }
+  .contact-tagline { font-size: clamp(24px, 6vw, 34px); }
+
+  /* Footer */
+  .foot-links { flex-wrap: wrap; justify-content: center; gap: 16px; }
 }
 .proj-desc {
   font-size: 13px;
@@ -1231,6 +1291,7 @@ header.scrolled {
   display: flex;
   align-items: center;
   gap: 16px;
+  flex-wrap: wrap;
 }
 .c-badge {
   font-family: "Syne", sans-serif;
@@ -1248,6 +1309,7 @@ header.scrolled {
 .c-val {
   font-size: 14px;
   color: var(--text-alt-muted);
+  word-break: break-all;
 }
 .contact-form {
   display: flex;
@@ -1297,7 +1359,7 @@ textarea.form-field {
   font-size: 13px;
   font-weight: 700;
   letter-spacing: 0.05em;
-  cursor: none;
+  cursor: pointer;
   align-self: flex-start;
   transition:
     transform 0.3s,
@@ -1372,67 +1434,148 @@ footer {
   transform: translateY(0);
 }
 
+/* ==============================================
+   RESPONSIVE — MEDIA QUERIES (UNIQUE ET PROPRE)
+   ============================================== */
+
+/* — TABLET LARGE (≤ 1200px) — */
+@media (max-width: 1200px) {
+  header,
+  header.scrolled {
+    padding: 18px 40px;
+  }
+  .hero { padding: 130px 40px 90px; }
+  .sec  { padding: 90px 40px; }
+  footer { padding: 40px 40px; }
+  .section-divider { padding: 0 40px; }
+  .proj-row::before { left: -40px; right: -40px; }
+}
+
+/* — TABLET (≤ 1024px) — */
 @media (max-width: 1024px) {
   header,
   header.scrolled {
-    padding: 18px 28px;
+    padding: 16px 28px;
   }
-  .hero,
-  .sec {
-    padding: 100px 28px 70px;
-  }
-  .section-divider {
-    padding: 0 28px;
-  }
-  footer {
-    padding: 36px 28px;
-  }
-  .hero-layout,
-  .skills-layout,
-  .contact-layout {
+  .hero         { padding: 120px 28px 80px; }
+  .sec          { padding: 80px 28px; }
+  footer        { padding: 36px 28px; }
+  .section-divider { padding: 0 28px; }
+
+  /* Hero : photo en haut */
+  .hero-layout {
     grid-template-columns: 1fr;
-    gap: 50px;
+    gap: 40px;
   }
-  .hero-right {
-    order: -1;
+  .hero-right { order: -1; }
+  .hero-left  { order: 1; }
+  .photo-container  { width: 280px; }
+  .photo-box        { height: 320px; }
+
+  /* About */
+  .about-bento { grid-template-columns: 1fr 1fr; }
+  .bento-card.wide { grid-column: span 2; }
+
+  /* Skills */
+  .skills-layout { grid-template-columns: 1fr; gap: 40px; }
+
+  /* Projets */
+  .proj-row {
+    grid-template-columns: 48px 110px 1fr;
+    gap: 20px;
   }
-  .photo-container {
-    width: 260px;
+  .proj-row::before { left: -28px; right: -28px; }
+  .proj-tags  { display: none; }
+  .proj-arrow { display: none; }
+
+  /* Contact */
+  .contact-layout { grid-template-columns: 1fr; gap: 40px; }
+
+  /* Footer */
+  footer { flex-direction: column; text-align: center; }
+  .foot-links { justify-content: center; }
+}
+
+/* — MOBILE LARGE (≤ 768px) — */
+@media (max-width: 768px) {
+  /* Nav */
+  .nav-links  { display: none; }
+  .hamburger  { display: flex; }
+  .theme-btn span:last-child { display: none; }
+
+  header,
+  header.scrolled { padding: 14px 20px; }
+
+  /* Hero */
+  .hero   { padding: 100px 20px 60px; }
+  .sec    { padding: 70px 20px; }
+  footer  { padding: 30px 20px; }
+  .section-divider { padding: 0 20px; }
+
+  .photo-container { width: 240px; }
+  .photo-box       { height: 280px; }
+
+  /* Projets */
+  .proj-row {
+    grid-template-columns: 44px 90px 1fr;
+    gap: 14px;
+    padding: 20px 0;
   }
-  .photo-box {
-    height: 300px;
-  }
-  .about-bento {
-    grid-template-columns: 1fr 1fr;
-  }
-  .bento-card.wide {
-    grid-column: span 2;
-  }
+  .proj-thumb { width: 90px; height: 60px; }
+  .proj-row::before { left: -20px; right: -20px; }
+
+  /* Formulaire contact */
+  .f-row { grid-template-columns: 1fr; gap: 12px; }
+}
+
+/* — MOBILE (≤ 540px) — */
+@media (max-width: 540px) {
+  header,
+  header.scrolled { padding: 12px 16px; }
+  .nav-right { gap: 10px; }
+  .logo { font-size: 16px; }
+  .theme-btn { padding: 6px 10px; font-size: 11px; }
+
+  .hero   { padding: 88px 16px 50px; }
+  .sec    { padding: 60px 16px; }
+  footer  { padding: 28px 16px; }
+  .section-divider { padding: 0 16px; }
+
+  .hero-eyebrow { margin-bottom: 18px; }
+  .hero-name  { font-size: clamp(34px, 9vw, 52px); }
+  .hero-role  { font-size: 15px; }
+
+  .photo-container { width: 200px; }
+  .photo-box       { height: 240px; }
+
+  /* About — 1 colonne */
+  .about-bento      { grid-template-columns: 1fr; }
+  .bento-card.wide  { grid-column: span 1; }
+  .bento-card       { padding: 24px; }
+
+  /* Section heads */
+  .sec-head { margin-bottom: 40px; }
+
+  /* Projets — layout simplifié */
   .proj-row {
     grid-template-columns: 40px 1fr;
+    grid-template-rows: auto auto;
+    gap: 10px 12px;
+    padding: 18px 0;
   }
-  .proj-tags {
-    display: none;
+  .proj-thumb {
+    grid-column: 1 / 3;
+    width: 100%;
+    height: 160px;
+    border-radius: 12px;
   }
-  footer {
-    flex-direction: column;
-    text-align: center;
-  }
-}
-@media (max-width: 640px) {
-  .nav-links {
-    display: none;
-  }
-  .about-bento {
-    grid-template-columns: 1fr;
-  }
-  .bento-card.wide {
-    grid-column: span 1;
-  }
-  .f-row {
-    grid-template-columns: 1fr;
-  }
-  .hero-name {
-    font-size: 38px;
-  }
+  .proj-num  { grid-column: 1 / 2; }
+  .proj-info { grid-column: 2 / 3; }
+
+  /* Contact form */
+  .btn-send { width: 100%; justify-content: center; }
+  .contact-tagline { font-size: clamp(24px, 6vw, 34px); }
+
+  /* Footer */
+  .foot-links { flex-wrap: wrap; justify-content: center; gap: 16px; }
 }
