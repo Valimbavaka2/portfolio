@@ -431,6 +431,26 @@ header.scrolled {
   border-radius: 20px;
   flex-shrink: 0;
 }
+
+/* Registration number style used in hero-meta and bento-card */
+.reg-number {
+  display: inline-block;
+  background: var(--pink-soft);
+  color: var(--pink);
+  padding: 4px 10px;
+  border-radius: 14px;
+  font-family: "Roboto Mono", monospace;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  font-size: 14px;
+  -webkit-font-smoothing: antialiased;
+  text-transform: uppercase;
+}
+
+[data-theme="dark"] .reg-number {
+  background: rgba(255, 107, 157, 0.12);
+  color: var(--pink-2);
+}
 .hero-right {
   display: flex;
   justify-content: center;
@@ -832,7 +852,7 @@ header.scrolled {
 }
 .proj-row {
   display: grid;
-  grid-template-columns: 60px 1fr auto;
+  grid-template-columns: 60px 120px 1fr auto;
   align-items: center;
   gap: 30px;
   padding: 28px 0;
@@ -888,6 +908,25 @@ header.scrolled {
 }
 .proj-row:hover .proj-name {
   color: var(--pink);
+}
+
+/* Project thumbnail */
+.proj-thumb {
+  width: 120px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 10px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+}
+.proj-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 .proj-desc {
   font-size: 13px;
